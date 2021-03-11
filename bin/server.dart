@@ -6,14 +6,13 @@ import 'package:shelf/shelf_io.dart' as io;
 
 import '../handlers/server-info-api.dart';
 
-// For Google Cloud Run, set _hostname to '0.0.0.0'.
 const _hostname = 'localhost';
 
 void main(List<String> args) async {
   var parser = ArgParser()..addOption('port', abbr: 'p');
   var result = parser.parse(args);
 
-  // For Google Cloud Run, we respect the PORT environment variable
+  // Use PORT env var when available
   var portStr = result['port'] ?? Platform.environment['PORT'] ?? '8080';
   var port = int.tryParse(portStr);
 
@@ -25,7 +24,7 @@ void main(List<String> args) async {
   }
 
   final handlerCascade = shelf.Cascade()
-      .add(serverInfoHandler)
+      .add(serverInfoHandler) // ReST API
       .add((request) => shelf.Response.notFound('Bad route'))
       .handler;
 
@@ -36,6 +35,3 @@ void main(List<String> args) async {
   var server = await io.serve(handler, _hostname, port);
   print('Serving at http://${server.address.host}:${server.port}');
 }
-
-// shelf.Response _echoRequest(shelf.Request request) =>
-//     shelf.Response.ok('Request for "${request.url}"');

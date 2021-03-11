@@ -2,15 +2,16 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:shelf/shelf.dart' as shelf;
+import '../utils/configure.dart';
 
 final serverInfoHandler =
     shelf.Cascade().add(countFiles).add(spaceUsed).handler;
 
 Future<shelf.Response> countFiles(shelf.Request request) async {
   if (request.url.path == 'api/count') {
-    final filesToServeDir = Directory('files-to-serve');
+    final filesDir = Configure.getFilesDir();
 
-    final fileCount = await filesToServeDir.list().length;
+    final fileCount = await filesDir.list().length;
 
     final response = jsonEncode({'fileCount': fileCount});
 
@@ -22,15 +23,15 @@ Future<shelf.Response> countFiles(shelf.Request request) async {
 }
 
 const KILO = 1024;
-const KB = 1024;
+const KB = KILO;
 const MB = KILO * KB;
 const GB = KILO * MB;
 
 Future<shelf.Response> spaceUsed(shelf.Request request) async {
   if (request.url.path == 'api/space-used') {
-    final filesToServeDir = Directory('files-to-serve');
+    final filesDir = Configure.getFilesDir();
 
-    final files = filesToServeDir.list();
+    final files = filesDir.list();
 
     var bytesOccupied = 0;
     await for (final file in files) {
