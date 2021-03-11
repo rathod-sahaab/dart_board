@@ -1,3 +1,6 @@
+/*
+ * This file contains the ReST API handlers
+ */
 import 'dart:io';
 import 'dart:convert';
 
@@ -8,6 +11,14 @@ import '../utils/helpers.dart';
 final serverInfoHandler =
     shelf.Cascade().add(countFiles).add(spaceUsed).handler;
 
+/// Count files and directories
+/// endpoint: ADDRESS/api/count
+/// response example:
+/// {
+///   'files': 6,
+///   'directories': 2
+/// }
+///
 Future<shelf.Response> countFiles(shelf.Request request) async {
   if (request.url.path == 'api/count') {
     final filesDir = Configure.getFilesDir();
@@ -35,6 +46,13 @@ Future<shelf.Response> countFiles(shelf.Request request) async {
   return shelf.Response.notFound('Bad Route');
 }
 
+/// Get space used by all files
+/// endpoint: ADDRESS/api/space-used
+/// response example:
+/// {
+///   'bytesUsed': 1536,
+///   'humanReadable': '1.50 KB'
+/// }
 Future<shelf.Response> spaceUsed(shelf.Request request) async {
   if (request.url.path == 'api/space-used') {
     final filesDir = Configure.getFilesDir();
