@@ -11,9 +11,20 @@ Future<shelf.Response> countFiles(shelf.Request request) async {
   if (request.url.path == 'api/count') {
     final filesDir = Configure.getFilesDir();
 
-    final fileCount = await filesDir.list().length;
+    final entities = filesDir.list(recursive: true);
 
-    final response = jsonEncode({'fileCount': fileCount});
+    var fileCount = 0;
+    var directoriesCount = 0;
+    await for (final file in entities) {
+      if (file is File) {
+        fileCount++;
+      } else if (file is Directory) {
+        directoriesCount++;
+      }
+    }
+
+    final response =
+        jsonEncode({'files': fileCount, 'directories': directoriesCount});
 
     return shelf.Response.ok(response,
         headers: {'content-type': 'application/json'});
@@ -31,29 +42,32 @@ Future<shelf.Response> spaceUsed(shelf.Request request) async {
   if (request.url.path == 'api/space-used') {
     final filesDir = Configure.getFilesDir();
 
-    final files = filesDir.list();
+    final entities = filesDir.list(recursive: true);
 
-    var bytesOccupied = 0;
-    await for (final file in files) {
+    var bytesUsed = 0;
+    await for (final file in entities) {
       if (file is File) {
-        bytesOccupied += await file.length();
+        bytesUsed += await file.length();
       }
     }
 
     var humanReadable;
 
-    if (bytesOccupied > GB) {
-      humanReadable = '${bytesOccupied / GB} GB';
-    } else if (bytesOccupied > MB) {
-      humanReadable = '${bytesOccupied / MB} MB';
-    } else if (bytesOccupied > KB) {
-      humanReadable = '${bytesOccupied / KB} KB';
+    if (bytesUsed >= GB) {
+      final gbs = bytesUsed / GB;
+      humanReadable = '${gbs.toStringAsFixed(2)} GB';
+    } else if (bytesUsed >= MB) {
+      final mbs = bytesUsed / MB;
+      humanReadable = '${mbs.toStringAsFixed(2)} MB';
+    } else if (bytesUsed >= KB) {
+      final kbs = bytesUsed / KB;
+      humanReadable = '${kbs.toStringAsFixed(2)} KB';
     } else {
-      humanReadable = '${bytesOccupied} B';
+      humanReadable = '${bytesUsed} B';
     }
 
     final response = jsonEncode(
-      {'bytes': bytesOccupied, 'humanReadable': humanReadable},
+      {'bytesUsed': bytesUsed, 'humanReadable': humanReadable},
     );
 
     return shelf.Response.ok(response,
