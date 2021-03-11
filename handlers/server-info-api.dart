@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:shelf/shelf.dart' as shelf;
 import '../utils/configure.dart';
+import '../utils/helpers.dart';
 
 final serverInfoHandler =
     shelf.Cascade().add(countFiles).add(spaceUsed).handler;
@@ -13,6 +14,7 @@ Future<shelf.Response> countFiles(shelf.Request request) async {
 
     final entities = filesDir.list(recursive: true);
 
+    // TODO: use fold
     var fileCount = 0;
     var directoriesCount = 0;
     await for (final file in entities) {
@@ -33,17 +35,13 @@ Future<shelf.Response> countFiles(shelf.Request request) async {
   return shelf.Response.notFound('Bad Route');
 }
 
-const KILO = 1024;
-const KB = KILO;
-const MB = KILO * KB;
-const GB = KILO * MB;
-
 Future<shelf.Response> spaceUsed(shelf.Request request) async {
   if (request.url.path == 'api/space-used') {
     final filesDir = Configure.getFilesDir();
 
     final entities = filesDir.list(recursive: true);
 
+    // TODO: use fold
     var bytesUsed = 0;
     await for (final file in entities) {
       if (file is File) {
@@ -51,20 +49,7 @@ Future<shelf.Response> spaceUsed(shelf.Request request) async {
       }
     }
 
-    var humanReadable;
-
-    if (bytesUsed >= GB) {
-      final gbs = bytesUsed / GB;
-      humanReadable = '${gbs.toStringAsFixed(2)} GB';
-    } else if (bytesUsed >= MB) {
-      final mbs = bytesUsed / MB;
-      humanReadable = '${mbs.toStringAsFixed(2)} MB';
-    } else if (bytesUsed >= KB) {
-      final kbs = bytesUsed / KB;
-      humanReadable = '${kbs.toStringAsFixed(2)} KB';
-    } else {
-      humanReadable = '${bytesUsed} B';
-    }
+    final humanReadable = Helpers.bytesToHumanReadable(bytesUsed);
 
     final response = jsonEncode(
       {'bytesUsed': bytesUsed, 'humanReadable': humanReadable},
