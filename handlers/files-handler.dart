@@ -15,13 +15,12 @@ Future<shelf.Response> downloadFile(shelf.Request request) async {
   if (ps[0] == 'files') {
     final filesDir = Configure.getFilesDirName();
 
-    // FIXME: may cause problems on windows handle '/' accordingly
-    final fileURI = '$filesDir/${ps.sublist(1).join('/')}';
-    // remove files/ (url part) and adds folder_path where files are stored instead
+    // remove files/ (url part) and adds folder_path (where files are stored) instead
+    var path = [filesDir, ...ps.sublist(1)];
+    final fileURI = Uri(pathSegments: path).toFilePath();
 
-    print(fileURI);
+    print('Looking for file in: $fileURI');
 
-    // FIXME: check if windows requires \ and find a way to do that if it do needs
     final file = File(fileURI);
 
     if (await file.exists()) {
