@@ -4,8 +4,8 @@ import 'package:args/args.dart';
 import 'package:shelf/shelf.dart' as shelf;
 import 'package:shelf/shelf_io.dart' as io;
 
-import '../handlers/files-handler.dart';
-import '../handlers/server-info-api.dart';
+import 'package:dart_board/handlers/files-handler.dart';
+import 'package:dart_board/handlers/server-info-api.dart';
 
 const _hostname = 'localhost';
 
