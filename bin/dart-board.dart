@@ -4,6 +4,7 @@ import 'package:args/args.dart';
 import 'package:shelf/shelf.dart' as shelf;
 import 'package:shelf/shelf_io.dart' as io;
 
+import 'package:dart_board/handlers/pages-handler.dart';
 import 'package:dart_board/handlers/files-handler.dart';
 import 'package:dart_board/handlers/server-info-api.dart';
 
@@ -25,6 +26,7 @@ void main(List<String> args) async {
   }
 
   final handlerCascade = shelf.Cascade()
+      .add(pagesHandler)
       .add(filesHandler)
       .add(serverInfoHandler) // ReST API
       .add((request) => shelf.Response.notFound('Bad route'))
