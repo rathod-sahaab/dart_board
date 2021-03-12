@@ -1,0 +1,11 @@
+{
+  "verbose": false,
+  "delay": "10",
+  "watch": ["."],
+  "ignore": ["build", "tmp", ".dart_tool"],
+  "ext": "dart html",
+  "exec": "dart run",
+  "execMap": {
+    "dart": "dart"
+  }
+}
