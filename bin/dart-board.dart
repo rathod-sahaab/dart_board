@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
+import 'package:dart_board/utils/helpers.dart';
 import 'package:shelf/shelf.dart' as shelf;
 import 'package:shelf/shelf_io.dart' as io;
 
@@ -11,6 +12,8 @@ import 'package:dart_board/handlers/server-info-api.dart';
 const _hostname = 'localhost';
 
 void main(List<String> args) async {
+  // Helpers.compileTemplates(); // compile jade templates;
+
   var parser = ArgParser()..addOption('port', abbr: 'p');
   var result = parser.parse(args);
 

@@ -1,8 +1,10 @@
 import 'dart:io';
-// import 'dart:convert';
 
 import 'package:dart_board/utils/configure.dart';
+import 'package:jaded/jaded.dart' as jade;
 import 'package:shelf/shelf.dart' as shelf;
+
+// import 'package:dart_board/templates/jaded.views.dart' as views;
 
 final pagesHandler = shelf.Cascade().add(directoryPageHandler).handler;
 
@@ -22,28 +24,40 @@ Future<shelf.Response> directoryPageHandler(shelf.Request request) async {
       return shelf.Response.notFound("Directory doesn't exists");
     }
 
-    var dirContents = '';
+    // to segregate directories and files
+    var dirFiles = [];
+    var dirDirs = [];
 
     await for (final entity in dir.list()) {
-      final eps = entity.uri.pathSegments;
-      var entityName = eps[eps.lastIndexWhere((seg) => seg != '')];
+      if (entity is File) {
+        final filename = entity.uri.pathSegments.last;
 
-      if (entity is Directory) {
-        entityName += '/'; // non functional '\' TODO
+        // files/path/to/file/in/files-to-serve
+        final fileLink =
+            ['files', ...entity.uri.pathSegments.sublist(1)].join('/');
+
+        dirFiles.add({'name': filename, 'link': '/$fileLink'});
+      } else {
+        final dirName = entity.uri.pathSegments
+            .elementAt(entity.uri.pathSegments.length - 2);
+        final dirLink =
+            ['dir', ...entity.uri.pathSegments.sublist(1)].join('/');
+
+        dirDirs.add({'name': '$dirName/', 'link': '/$dirLink'});
       }
-      dirContents += '<li>$entityName</li>';
     }
 
-    final html = '''
-				<html>
-				<body>
-				<h1> ${dir.path} </h1>
-				<ul>
-				$dirContents
-				</ul>
-				</body>
-				</html>
-				''';
+    final template = await File('templates/views/index.jade').readAsString();
+    // print(template);
+    var renderAsync = jade.compile(template);
+
+    var html = await renderAsync({
+      'contents': [...dirDirs, ...dirFiles]
+    });
+
+    // final render = views.JADE_TEMPLATES['lib/templates/views/index.jade'];
+    // final html = render();
+
     return shelf.Response.ok(html, headers: {'content-type': 'text/html'});
   }
   return shelf.Response.notFound('Something went wrong');

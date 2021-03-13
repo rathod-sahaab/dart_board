@@ -9,6 +9,7 @@ environment:
 dependencies:
   args: ^1.6.0
   shelf: ^0.7.5
+  jaded: 0.3.1
 
 dev_dependencies:
   pedantic: ^1.9.0

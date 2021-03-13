@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'package:dart_board/utils/configure.dart';
+import 'package:jaded/jaded.dart' as jade;
+
 class Helpers {
   static const KILO = 1024;
   static const KB = KILO;
@@ -21,4 +25,27 @@ class Helpers {
     }
     return '${bytes} B';
   }
+
+  static String pathFromSegments(List<String> pathSegments,
+      {List<String> prefix}) {
+    final ps = prefix == null ? pathSegments : [...prefix, ...pathSegments];
+
+    return Uri(pathSegments: ps).toFilePath();
+  }
+
+  /* To disable compilation
+  static void compileTemplates() {
+    final basedir = Configure.TEMPLATES_DIR;
+    var tmpls = jade.renderDirectory(pathFromSegments(basedir));
+    print(tmpls);
+
+    var file = File(pathFromSegments(['jaded.views.dart'], prefix: basedir));
+
+    if (!file.existsSync()) {
+      file.createSync();
+    }
+
+    file.writeAsStringSync(tmpls);
+  }
+  */
 }

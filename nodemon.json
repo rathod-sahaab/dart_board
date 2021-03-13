@@ -3,7 +3,7 @@
   "delay": "10",
   "watch": ["."],
   "ignore": ["build", "tmp", ".dart_tool"],
-  "ext": "dart html",
+  "ext": "dart html jade",
   "exec": "dart run",
   "execMap": {
     "dart": "dart"
