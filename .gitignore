@@ -10,3 +10,8 @@ doc/api/
 
 # pug template cache
 jaded.views.dart
+
+# compiled/traspiled js
+*.dart.js
+*.dart.js.deps
+*.dart.js.map

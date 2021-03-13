@@ -11,6 +11,8 @@ html
 			| click #{' '}
 			a(href='/dir') home
 			|  #{' '} to go to home directory
+			br
+			br
 			div.server-details Server Details:
 				#info Error fetching details...
 			ul
@@ -19,3 +21,4 @@ html
 						a(href=entry['link'])= entry['name']
 				else
 					p Directory is empty...
+			script(src='/static/index.dart.js')
