@@ -1,17 +1,21 @@
 html
 	head
 		title Dart Board - The file server
+		link(rel='stylesheet', href="/static/index.css")
 	body
-		h1 Welcome to dartboard!
-		p Click directories to go to directory, directories have / at end of their name
-		| Click on files to download them.
-		| use back button of your browser to go back
-		| click #{' '}
-		a(href='/dir') home
-		|  #{' '} to go to home directory
-		ul
-			each entry in contents
-				li
-					a(href=entry['link'])= entry['name']
-			else
-				p Directory is empty...
+		.content
+			h1 Welcome to dartboard!
+			p Click directories to go to directory, directories have / at end of their name
+			| Click on files to download them.
+			| use back button of your browser to go back,
+			| click #{' '}
+			a(href='/dir') home
+			|  #{' '} to go to home directory
+			div.server-details Server Details:
+				#info Error fetching details...
+			ul
+				each entry in contents
+					li
+						a(href=entry['link'])= entry['name']
+				else
+					p Directory is empty...
