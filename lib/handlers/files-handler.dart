@@ -25,8 +25,9 @@ Future<shelf.Response> downloadFile(shelf.Request request) async {
     final file = File(fileURI);
 
     if (await file.exists()) {
+      final mimeType = lookupMimeType(fileURI);
       return shelf.Response.ok(await file.readAsString(), headers: {
-        // 'content-type': 'text/plain',
+        'content-type': mimeType,
         'content-disposition': 'attachment; filename="${ps.last}"',
       });
     } else {
