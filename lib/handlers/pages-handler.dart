@@ -6,7 +6,16 @@ import 'package:shelf/shelf.dart' as shelf;
 
 // import 'package:dart_board/templates/jaded.views.dart' as views;
 
-final pagesHandler = shelf.Cascade().add(directoryPageHandler).handler;
+final pagesHandler =
+    shelf.Cascade().add(homePage).add(directoryPageHandler).handler;
+
+Future<shelf.Response> homePage(shelf.Request request) async {
+  if (request.url.path.isEmpty) {
+    // redirect to home dir
+    return shelf.Response.movedPermanently('/dir');
+  }
+  return shelf.Response.notFound('Not found');
+}
 
 /// ADDRESS/dir/path/to/directory
 /// to view contents of the directory
