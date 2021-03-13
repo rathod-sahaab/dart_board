@@ -13,6 +13,14 @@ Basic idea is to make a file serving application with features mentioned bellow:
 Created from templates made available by Stagehand under a BSD-style
 [license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
 
+## Stack
+
+**Programming:** dart _(frontend and backend)_
+
+**HTML templates:** pug/jade
+
+**Styling:** css
+
 ## Development
 
 Make sure you have installed `dart >= 2.12` and `dart2js` they come with `flutter`.
@@ -40,3 +48,11 @@ dart2js -o static/index.dart.js static/index.dart
 
 customize above for your file name, I am trying to figure out a way
 to do this automatically without re-compiling the whole project.
+
+### Test
+
+Go to [http://localhost:8080](http://localhost:8080) and see changes.
+
+## Details
+
+This serves file from `files-to-server/` directory, which can be customized (not yet);
