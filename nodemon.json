@@ -1,9 +1,9 @@
 {
   "verbose": false,
   "delay": "10",
-  "watch": ["."],
-  "ignore": ["build", "tmp", ".dart_tool"],
-  "ext": "dart html jade",
+  "watch": ["bin", "lib"],
+  "ignore": ["build", "tmp", ".dart_tool", "jaded.views.dart"],
+  "ext": "dart",
   "exec": "dart run",
   "execMap": {
     "dart": "dart"
