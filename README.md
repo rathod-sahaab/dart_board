@@ -10,9 +10,6 @@ Basic idea is to make a file serving application with features mentioned bellow:
 - Server side generated HTML to provide interface to users
 - ReST API to query status of file server(Number of files, disk space occupied by files etc)
 
-Created from templates made available by Stagehand under a BSD-style
-[license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
-
 ## Stack
 
 **Programming:** dart _(frontend and backend)_
